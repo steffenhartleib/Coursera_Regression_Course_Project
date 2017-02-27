@@ -125,7 +125,7 @@ $(document).ready(function () {
 
 <div id="executive-summary" class="section level2">
 <h2>Executive Summary</h2>
-<p>I analyzed the mtcar data set to answer the following questions:<br />
+<p>The assignemt is to analyze the the mtcar data set to answer the following questions:<br />
 1. Is an automatic or manual transmission better for mpg?<br />
 2. Can we quantify the mpg difference between automatic and manual transmissions?  </p>
 <div id="conclusion" class="section level3">
@@ -152,7 +152,7 @@ But the R squared shows that only about 36% of the variation in mpg is explained
 </div>
 <div id="is-automatic-or-manual-transmission-better-for-mpg" class="section level2">
 <h2>Is automatic or manual transmission better for mpg?</h2>
-<p>Because transmission type alone doesn’t explain the difference in mpg we should add other variables to the model. If the model improves and the transmission coefficient stays significant we’ll know that transmission type does impact mpg. And we’ll be able to quantify the impact. (Above we only quantified the difference) But if the Transmission coefficent becomes insignificant we now that transmission type doesn’t impact mpg. At least not accoridng to this data set. Based on Fig. 2 we would expect Weight and Number of Cylinders to have some impact. Let’s add them one by one.</p>
+<p>Because transmission type alone doesn’t explain the difference in mpg we should add other variables to the model. If the model improves and the transmission coefficient stays significant we’ll know that transmission type does impact mpg. And we’ll be able to quantify the impact. (Above we only quantified the difference) But if the Transmission coefficent becomes insignificant we know that transmission type does not impact mpg. At least not accoridng to this data set. Based on Fig. 2 we would expect Weight and Number of Cylinders to have some impact. Let’s add them one by one.</p>
 <div id="model-2-adding-weight" class="section level3">
 <h3>Model 2: adding weight</h3>
 <pre><code>## lm(formula = mpg ~ am + wt, data = mtcars)</code></pre>

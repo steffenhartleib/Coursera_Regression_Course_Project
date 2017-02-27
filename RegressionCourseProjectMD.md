@@ -3,7 +3,7 @@ Steffen Hartleib
 February 16, 2015  
 
 ## Executive Summary
-I analyzed the mtcar data set to answer the following questions:  
+The assignemt is to analyze the the mtcar data set to answer the following questions:  
 1. Is an automatic or manual transmission better for mpg?  
 2. Can we quantify the mpg difference between automatic and manual transmissions? 
 &nbsp;
@@ -41,7 +41,7 @@ But the R squared shows that only about 36% of the variation in mpg is explained
 
 ## Is automatic or manual transmission better for mpg?
 
-Because transmission type alone doesn't explain the difference in mpg we should add other variables to the model. If the model improves and the transmission coefficient stays significant we'll know that transmission type does impact mpg. And we'll be able to quantify the impact. (Above we only quantified the difference)  But if the Transmission coefficent becomes insignificant we now that transmission type doesn't impact mpg. At least not accoridng to this data set. Based on Fig. 2 we would expect Weight and Number of Cylinders to have some impact. Let's add them one by one. 
+Because transmission type alone doesn't explain the difference in mpg we should add other variables to the model. If the model improves and the transmission coefficient stays significant we'll know that transmission type does impact mpg. And we'll be able to quantify the impact. (Above we only quantified the difference)  But if the Transmission coefficent becomes insignificant we know that transmission type does not impact mpg. At least not accoridng to this data set. Based on Fig. 2 we would expect Weight and Number of Cylinders to have some impact. Let's add them one by one. 
 
 ### Model 2: adding weight
 
