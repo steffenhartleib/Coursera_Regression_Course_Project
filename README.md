@@ -6,7 +6,7 @@ The data set was the mpg set that comes with R.
 
 There were two questions:
   1. Is there a quantifiable difference in MPG between automatic and manual cars?
-  2. Is automatic or manual transmission better for gas milage?
+  2. Is an automatic or a manual transmission better for gas milage?
 
 The answer may surprise you...
 
