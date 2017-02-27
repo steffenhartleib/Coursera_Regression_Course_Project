@@ -1,0 +1,147 @@
+---
+title: "Coursera Regression Course Project"
+author: "Steffen Hartleib"
+date: "February 16, 2015"
+output: html_document
+---
+
+## Executive Summary
+I analyzed the mtcar data set to answer the following questions:  
+1. Is an automatic or manual transmission better for mpg?  
+2. Can we quantify the mpg difference between automatic and manual transmissions? 
+&nbsp;
+
+### Conclusion:  
+Manual cars get much better gas milage than automatic cars. 7.5 mpg to be exact. That's significant at the 1% level. But the transmission type is not causing this difference in mpg. Weight and number of cylinders are.  Automatic cars tend to be heavier and have more cylinders than manual cars and that's what's causing the higher fuel consumption.    
+
+
+## Exploratory Analysis
+The dataset comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles.  
+13 of the 32 cars have manual transmissions (Fig 1)  
+The models with manual transmission have significantly lower average gas mileage than the models with manual transmission:  
+
+```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.width=3, fig.height=2}
+library(dplyr)
+library(ggplot2)
+data(mtcars)
+mtcarsf <- mutate(mtcars, amF = factor(am, levels = c('0','1'), labels = c("Automatic", "Manual")))
+g <- ggplot(mtcarsf, aes(amF, mpg, fill = amF))
+g + geom_boxplot() + xlab("Transmission Type") + ylab("mpg") + theme(legend.position = "none", text = element_text(size=10))
+```
+
+## Can we quantify the mpg difference between automatic and manual transmissions?
+A  simple linear regression model with mpg as the outcome and transmission type (am) as the predictor shows with 1% significance that on average manual models get 7.25 more miles per gallon than automatic models.  
+But the R squared shows that only about 36% of the variation in mpg is explained by this model. So yes, this model does quantify the DIFFERNCE in mpg between the two groups. But we need further analysis to determine weither transmission does actually explain the difference, or whether the difference is driven by other factors.
+
+
+```{r, echo = FALSE, evaluate = TRUE,  warning = FALSE, message = FALSE}
+fitA <- lm(mpg ~ amF, data = mtcarsf)
+summary(fitA)$coef
+```
+ 
+
+```{r, echo= FALSE, warning = FALSE, message = FALSE}
+Rsquared1 <- summary(fitA)$r.squared
+F1 <- summary(fitA)$fstatistic[1]
+pValueF1 <-  pf(summary(fitA)$f[1],summary(fitA)$f[2], summary(fitA)$f[3], lower.tail = FALSE)
+Model1 <- cbind(Rsquared1,F1,pValueF1)
+row.names(Model1) <- "Model 1"
+colnames(Model1) <- c("R-squared","F-statistic", "p-value")
+Model1
+```
+ 
+
+## Is automatic or manual transmission better for mpg?
+
+Because transmission type alone doesn't explain the difference in mpg we should add other variables to the model. If the model improves and the transmission coefficient stays significant we'll know that transmission type does impact mpg. And we'll be able to quantify the impact. (Above we only quantified the difference)  But if the Transmission coefficent becomes insignificant we now that transmission type doesn't impact mpg. At least not accoridng to this data set. Based on Fig. 2 we would expect Weight and Number of Cylinders to have some impact. Let's add them one by one. 
+
+### Model 2: adding weight
+```{r, echo= FALSE}
+fitAW <- lm(mpg ~ am+ wt, data = mtcars)
+summary(fitAW)$call
+summary(fitAW)$coef
+```
+```{r, echo= FALSE}
+Rsquared2 <- summary(fitAW)$r.squared
+F2 <- summary(fitAW)$fstatistic[1]
+pValueF2 <-  pf(summary(fitAW)$f[1],summary(fitAW)$f[2], summary(fitAW)$f[3], lower.tail = FALSE)
+Model2 <- cbind(Rsquared2,F2,pValueF2)
+row.names(Model2) <- "Model 2" 
+Model1v2 <- rbind(Model1,Model2)
+Model1v2
+
+```
+The transmission type (am) is no longer significant. The p value 0.9, which means we reject Null Hypothesis that the coefficent is 0. Weight hoever is highly significant. It decreases mpg by 5.3 Miles per short ton.
+Also, the R-squared more than doubled and the F-value is now statistically signficant. This is a much better model. Let's add cylinders next.
+
+
+### Model 3: adding cylinders
+
+```{r, echo= FALSE}
+fitAWC <- lm(mpg ~ am + wt + cyl, data = mtcars)
+summary(fitAWC)$call
+summary(fitAWC)$coef
+```
+
+```{r, echo= FALSE}
+Rsquared3 <- summary(fitAWC)$r.squared
+F3 <- summary(fitAWC)$fstatistic[1]
+pValueF3 <-  pf(summary(fitAW)$f[1],summary(fitAW)$f[2], summary(fitAW)$f[3], lower.tail = FALSE)
+Model3 <- cbind(Rsquared3,F3,pValueF3)
+row.names(Model3) <- "Model 3"
+Model1v2vs3 <-rbind(Model1,Model2, Model3)
+Model1v2vs3
+```
+
+The "Transmission Type"" coefficient is still insignificant. But the new "No of Cylinders" coefficent is significant at 1%.  And the model improved futher. (F statistic and R squared are up). Now each short ton of weight is reducing mpg by 3.12 miles. Each additional pair of cylinders is reducing mpg by 1.5 miles. So it's the weight and the cylinders, not the transmission that's causing the higher fuel consumption of automatic cars. They're just heavier and have bigger engines. (Fig. 5). Adding additonal variable (hp and displacement) does not improve this model. (Fig. 3)
+
+## Residuals of Model 3
+
+The residuals are aproximately normally distributed. There aren't any ouliers with disproportional influence, and a residual vs. fitted plot doesn't reveal any obvious patters we may have missed. This gives us further confidence in the conclusions we drew from from Model 3. 
+
+
+## Apendix
+
+### Figure 1: mtcar data summary
+```{r, echo= FALSE}
+str(mtcars)
+help(mtcars)
+```
+
+### Figure 2: mtcar
+```{r,echo = FALSE}
+library(stats)
+library(graphics)
+pairs(mtcars, panel = panel.smooth, main = "Motor Cars", col = 3)
+```
+
+### Figure 3: Model including displacement + horse power
+```{r, echo = FALSE}
+Model4 <- lm(mpg ~ am + wt + cyl + disp + hp, mtcars)
+summary(Model4)
+```
+
+### Figure4: Residual Plot of the linear model weight predicting miles per galon
+
+```{r, echo= FALSE}
+par(mfrow = c(2, 2))
+plot(fitAWC)
+```
+
+### Figure 5: Miles Per Gallon vs. Weight - showing Cylinders and Transmission
+```{r, echo= FALSE, fig.height = 4, fig.width = 5}
+g3 <- ggplot(mtcarsf, aes(wt, mpg))
+g3 + geom_point(aes(color = amF, shape = factor(cyl)), size = 3) + geom_smooth(method = lm) + xlab("Weight") + ylab("mpg(Miles per galon)") + guides(shape = guide_legend("Cylinders"), color = guide_legend("Transmission")) + theme(text = element_text(size=10))
+```
+
+
+
+
+
+
+
+
+
+
+
+
