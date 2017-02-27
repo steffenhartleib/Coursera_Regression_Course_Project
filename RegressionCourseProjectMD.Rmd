@@ -2,7 +2,10 @@
 title: "Coursera Regression Course Project"
 author: "Steffen Hartleib"
 date: "February 16, 2015"
-output: html_document
+output:
+  html_document:
+    keep_md: yes
+  pdf_document: default
 ---
 
 ## Executive Summary
@@ -17,7 +20,7 @@ Manual cars get much better gas milage than automatic cars. 7.5 mpg to be exact.
 
 ## Exploratory Analysis
 The dataset comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles.  
-13 of the 32 cars have manual transmissions (Fig 1)  
+13 of the 32 cars have manual transmissions (Fig 1).  
 The models with manual transmission have significantly lower average gas mileage than the models with manual transmission:  
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.width=3, fig.height=2}
@@ -93,7 +96,7 @@ Model1v2vs3 <-rbind(Model1,Model2, Model3)
 Model1v2vs3
 ```
 
-The "Transmission Type"" coefficient is still insignificant. But the new "No of Cylinders" coefficent is significant at 1%.  And the model improved futher. (F statistic and R squared are up). Now each short ton of weight is reducing mpg by 3.12 miles. Each additional pair of cylinders is reducing mpg by 1.5 miles. So it's the weight and the cylinders, not the transmission that's causing the higher fuel consumption of automatic cars. They're just heavier and have bigger engines. (Fig. 5). Adding additonal variable (hp and displacement) does not improve this model. (Fig. 3)
+The Transmission Type coefficient is still insignificant. But the new "No of Cylinders" coefficent is significant at 1%.  And the model improved futher. (F statistic and R squared are up). Now each short ton of weight is reducing mpg by 3.12 miles. Each additional pair of cylinders is reducing mpg by 1.5 miles. So it's the weight and the cylinders, not the transmission that's causing the higher fuel consumption of automatic cars. They're just heavier and have bigger engines. (Fig. 5). Adding additonal variable (hp and displacement) does not improve this model. (Fig. 3)
 
 ## Residuals of Model 3
 
